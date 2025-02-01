@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load django_vite %}
+
+{% block title %}Demo{% endblock %}
+
+{% block content %}
+  <div class="row">
+    {% if user.is_authenticated %}
+      <h1 class="mb-3">Demo</h1>
+      <!-- Javascript disabled -->
+      <noscript>
+        <div class="card">
+          <div class="card-body">
+            <strong>
+              We're sorry but the Demo tool doesn't work properly without JavaScript enabled. Please enable it to continue.
+            </strong>
+          </div>
+        </div>
+      </noscript>
+
+      <!-- Javascript enabled, Vue SPA is bootstrapped here -->
+      <div id="app"></div>
+    {% else %}
+      <div class="px-3">
+        <div class="card px-4">
+          <div class="card-body">
+            <h1 class="display-5 fw-bold fs-2">Welcome to the Demo tool</h1>
+            <hr />
+            <a href="{{ LOGIN_URL }}" class="btn btn-primary" role="button">Log In</a>
+            <a href="{{ REGISTER_URL }}" class="btn btn-primary" role="button">Register</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {% if user.is_authenticated %}
+    <script id="csrf" type="application/json">""</script>
+    {% if ga_measurement %}
+      <script id="ga_measurement" type="application/json">""</script>
+    {% endif %}
+    <!-- Vite rendered JS -->
+    {% vite_asset 'src/main.js' %}
+  {% endif %}
+{% endblock %}
